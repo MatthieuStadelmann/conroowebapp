@@ -21,20 +21,26 @@ export function formatDay(dateString: string): string {
  */
 export function formatDate(
   dateString: string,
-  includeDay: boolean = false
+  includeDay: boolean = false,
+  includeYear: boolean = false
 ): string {
   const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = includeDay
-    ? {
-        weekday: "long",
-        day: "2-digit",
-        month: "short",
-      }
-    : {
-        day: "2-digit",
-        month: "short",
-      };
-  return date.toLocaleDateString("en-GB", options);
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "short",
+    ...(includeDay && { weekday: "long" }),
+    ...(includeYear && { year: "numeric" }),
+  };
+
+  const formattedDate = date.toLocaleDateString("en-GB", options);
+
+  if (includeDay && includeYear) {
+    const parts = formattedDate.split(" ");
+    return `${parts[0]}, ${parts[1]} ${parts[2]}, ${parts[3]}`;
+  }
+
+  // Return the formatted date
+  return formattedDate;
 }
 
 /**

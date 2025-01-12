@@ -33,7 +33,10 @@ onMounted(() => {
           }"
           @click="store.selectSlot(slot)"
         >
-          <time class="text-lg font-medium uppercase" :datetime="slot.start_time">
+          <time
+            class="text-lg font-medium uppercase"
+            :datetime="slot.start_time"
+          >
             {{ formatTime(slot.start_time) }}
           </time>
           <br />
