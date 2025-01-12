@@ -45,6 +45,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
   const selectSlot = (slot: TimeSlot | null) => {
     selectedSlot.value = slot;
   };
+  console.log('selectedSlot', selectedSlot);
 
   const startSSE = () => {
     const eventSource = new EventSource(import.meta.env.VITE_API_URL + "/sse");
