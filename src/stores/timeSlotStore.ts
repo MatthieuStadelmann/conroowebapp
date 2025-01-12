@@ -38,6 +38,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
   const selectSlot = (slot: TimeSlot) => {
     selectedSlot.value = slot;
   };
+  console.log('selectedSlot', selectedSlot);
 
   return {
     timeSlots,
