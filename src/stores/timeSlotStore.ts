@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import type { TimeSlot } from "../types/TimeSlot";
+import type { TimeSlot, SSEUpdate } from "../types/TimeSlot";
 
 function getDay(dateString: string): string {
   const date = new Date(dateString);
@@ -10,6 +10,7 @@ function getDay(dateString: string): string {
 export const useTimeSlotStore = defineStore("timeSlot", () => {
   const timeSlots = ref<TimeSlot[]>([]);
   const selectedSlot = ref<TimeSlot | null>(null);
+  const connectionStatus = ref<"connected" | "disconnected">("disconnected");
 
   const fetchTimeSlots = async () => {
     try {
@@ -37,13 +38,44 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
   const selectSlot = (slot: TimeSlot | null) => {
     selectedSlot.value = slot;
   };
-  console.log('selectedSlot', selectedSlot);
+
+  const startSSE = () => {
+    const eventSource = new EventSource(import.meta.env.VITE_API_URL + "/sse");
+
+    connectionStatus.value = "connected";
+
+    eventSource.onmessage = (event) => {
+      try {
+        const update: SSEUpdate = JSON.parse(event.data);
+
+        const slotToUpdate = timeSlots.value.find(
+          (slot) => slot.id === update.id
+        );
+        if (slotToUpdate) {
+          slotToUpdate.capacity.current_capacity = update.currentCapacity;
+          slotToUpdate.category = update.category;
+        }
+      } catch (error) {
+        console.error("Error processing SSE update:", error);
+      }
+    };
+
+    eventSource.onerror = () => {
+      console.error("SSE connection failed. Retrying...");
+      connectionStatus.value = "disconnected";
+      eventSource.close();
+
+      setTimeout(startSSE, 5000);
+    };
+  };
 
   return {
     timeSlots,
     groupedTimeSlots,
     selectedSlot,
+    connectionStatus,
     fetchTimeSlots,
     selectSlot,
+    startSSE,
   };
 });
