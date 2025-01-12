@@ -18,9 +18,27 @@ const selectedSlot = computed(() => store.selectedSlot);
     }"
   >
     <div v-if="selectedSlot">
-        <h2 class="text-xl font-bold">
-          {{ formatDate(selectedSlot.start_time, true) }}
-        </h2>
+      <h2 class="text-xl font-bold">
+        {{ formatDate(selectedSlot.start_time, true) }}
+      </h2>
+      <div class="relative mt-2 h-3 w-full max-w-60 rounded-full bg-gray-200">
+        <div
+          class="absolute left-0 top-0 h-full rounded-full"
+          :class="{
+            'bg-greenCategory': selectedSlot.category === 'green',
+            'bg-yellowCategory': selectedSlot.category === 'yellow',
+            'bg-redCategory': selectedSlot.category === 'red',
+          }"
+          :style="{
+            width:
+              ((selectedSlot.capacity.max_capacity -
+                selectedSlot.capacity.current_capacity) /
+                selectedSlot.capacity.max_capacity) *
+                100 +
+              '%',
+          }"
+        ></div>
+      </div>
       <div class="mt-4 flex flex-col lg:flex-row lg:items-center">
         <p class="min-w-[200px] flex-shrink-0">
           <strong>Time:</strong>
@@ -44,4 +62,3 @@ const selectedSlot = computed(() => store.selectedSlot);
     </div>
   </div>
 </template>
-
