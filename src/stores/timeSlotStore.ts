@@ -10,7 +10,7 @@ function getDay(dateString: string): string {
 export const useTimeSlotStore = defineStore("timeSlot", () => {
   const timeSlots = ref<TimeSlot[]>([]);
   const selectedSlot = ref<TimeSlot | null>(null);
-  const connectionStatus = ref<"connected" | "disconnected">("disconnected");
+  const connectionStatus = ref<"connected" | "disconnected" | "error-processing-message">("disconnected");
 
   const fetchTimeSlots = async () => {
     try {
@@ -41,13 +41,13 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
 
   const startSSE = () => {
     const eventSource = new EventSource(import.meta.env.VITE_API_URL + "/sse");
-
+  
     connectionStatus.value = "connected";
-
+  
     eventSource.onmessage = (event) => {
       try {
         const update: SSEUpdate = JSON.parse(event.data);
-
+  
         const slotToUpdate = timeSlots.value.find(
           (slot) => slot.id === update.id
         );
@@ -57,18 +57,21 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
         }
       } catch (error) {
         console.error("Error processing SSE update:", error);
+        // Optionally mark the connection status if a fatal error affects the app
+        connectionStatus.value = "error-processing-message";
       }
     };
-
+  
     eventSource.onerror = () => {
       console.error("SSE connection failed. Retrying...");
       connectionStatus.value = "disconnected";
       eventSource.close();
-
+  
+      // Retry connection after 5 seconds
       setTimeout(startSSE, 5000);
     };
   };
-
+  
   return {
     timeSlots,
     groupedTimeSlots,

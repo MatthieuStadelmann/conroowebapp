@@ -23,12 +23,20 @@ onMounted(() => {
           :class="{
             'bg-green-500': store.connectionStatus === 'connected',
             'bg-red-500': store.connectionStatus === 'disconnected',
+            'bg-yellow-500':
+              store.connectionStatus === 'error-processing-message',
           }"
         ></span>
       </span>
-      <span>{{
-        store.connectionStatus === "connected" ? "Live updates" : "Disconnected"
-      }}</span>
+      <span>
+        {{
+          store.connectionStatus === "connected"
+            ? "Live updates"
+            : store.connectionStatus === "disconnected"
+              ? "Disconnected"
+              : "Error processing updates"
+        }}</span
+      >
     </div>
   </div>
 </template>
