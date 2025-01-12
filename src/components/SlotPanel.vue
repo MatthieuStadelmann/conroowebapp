@@ -19,7 +19,7 @@ const selectedSlot = computed(() => store.selectedSlot);
   >
     <div v-if="selectedSlot">
       <h2 class="text-xl font-bold">
-        {{ formatDate(selectedSlot.start_time, true) }}
+        {{ formatDate(selectedSlot.start_time, true, true) }}
       </h2>
       <div class="relative mt-2 h-3 w-full max-w-60 rounded-full bg-gray-200">
         <div
