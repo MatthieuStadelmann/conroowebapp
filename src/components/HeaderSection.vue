@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useTimeSlotStore } from "@/stores/timeSlotStore";
+import { useTimeSlotStore } from "../stores/timeSlotStore";
 
 const store = useTimeSlotStore();
 
