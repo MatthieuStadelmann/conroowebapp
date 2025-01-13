@@ -1,8 +1,36 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
+import {
+  STATUS_CONNECTED,
+  STATUS_CONNECTING,
+  STATUS_DISCONNECTED,
+  STATUS_ERROR,
+} from "../constants/connectionStatus.ts";
 
 const store = useTimeSlotStore();
+
+const connectionStatusClass = computed(() => {
+  const STATUS_CLASSES: Record<string, string> = {
+    [STATUS_CONNECTING]: "bg-blue-400",
+    [STATUS_CONNECTED]: "bg-green-500",
+    [STATUS_DISCONNECTED]: "bg-red-500",
+    [STATUS_ERROR]: "bg-yellow-500",
+  };
+
+  return STATUS_CLASSES[store.connectionStatus] || "bg-gray-400";
+});
+
+const connectionStatusMessage = computed(() => {
+  const STATUS_MESSAGES: Record<string, string> = {
+    [STATUS_CONNECTING]: "Connecting",
+    [STATUS_CONNECTED]: "Live updates",
+    [STATUS_DISCONNECTED]: "Disconnected",
+    [STATUS_ERROR]: "Error processing updates",
+  };
+
+  return STATUS_MESSAGES[store.connectionStatus] || "Unknown status";
+});
 
 onMounted(() => {
   store.startSSE();
@@ -15,28 +43,20 @@ onMounted(() => {
     <div class="flex items-center space-x-2">
       <span class="relative flex h-3 w-3">
         <span
-          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
-          v-if="store.connectionStatus === 'connected'"
+          class="absolute inline-flex h-full w-full rounded-full opacity-75"
+          :class="{
+            'animate-ping bg-blue-400':
+              store.connectionStatus === STATUS_CONNECTING,
+            'animate-ping bg-green-400':
+              store.connectionStatus === STATUS_CONNECTED,
+          }"
         ></span>
         <span
           class="relative inline-flex h-3 w-3 rounded-full"
-          :class="{
-            'bg-green-500': store.connectionStatus === 'connected',
-            'bg-red-500': store.connectionStatus === 'disconnected',
-            'bg-yellow-500':
-              store.connectionStatus === 'error-processing-message',
-          }"
+          :class="connectionStatusClass"
         ></span>
       </span>
-      <span>
-        {{
-          store.connectionStatus === "connected"
-            ? "Live updates"
-            : store.connectionStatus === "disconnected"
-              ? "Disconnected"
-              : "Error processing updates"
-        }}</span
-      >
+      <span>{{ connectionStatusMessage }}</span>
     </div>
   </div>
 </template>
