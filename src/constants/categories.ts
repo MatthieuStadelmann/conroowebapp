@@ -1,4 +1,4 @@
-import type { Category } from "../types/TimeSlot";
+import type { Category } from "../types";
 
 export const CATEGORY_GREEN: Category = "green";
 export const CATEGORY_YELLOW: Category = "yellow";
