@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useTimeSlotStore } from "@/stores/timeSlotStore";
-import { formatDate, formatTime } from "@/utils/formatters";
+import { useTimeSlotStore } from "../stores/timeSlotStore";
+import { formatDate, formatTime } from "../utils/formatters";
 
 const store = useTimeSlotStore();
 
