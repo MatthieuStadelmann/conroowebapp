@@ -6,6 +6,9 @@ export default {
       colors: {
         primary: "#14005C",
         secondary: "#01E8E8",
+        greenCategory: "#28A745",
+        yellowCategory: "#FFC107",
+        redCategory: "#DC3545",
       },
       fontFamily: {
         sans: ["Manrope", "sans-serif"],
