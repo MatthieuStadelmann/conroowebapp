@@ -3,6 +3,10 @@ import { onMounted } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
 import { formatDate, formatDay, formatTime } from "../utils/formatters";
 
+const CATEGORY_GREEN = "green";
+const CATEGORY_YELLOW = "yellow";
+const CATEGORY_RED = "red";
+
 const store = useTimeSlotStore();
 
 onMounted(() => {
@@ -21,13 +25,13 @@ onMounted(() => {
           class="mb-4 rounded-lg p-2 text-white last:mb-0"
           :key="slot.id"
           :class="{
-            'bg-greenCategory': slot.category === 'green',
-            'bg-yellowCategory': slot.category === 'yellow',
-            'bg-redCategory': slot.category === 'red',
+            'bg-greenCategory': slot.category === CATEGORY_GREEN,
+            'bg-yellowCategory': slot.category === CATEGORY_YELLOW,
+            'bg-redCategory': slot.category === CATEGORY_RED,
           }"
         >
-          <time class="text-xl" :datetime="slot.start_time">
-            {{ formatTime(slot.start_time) }} AM
+          <time class="text-xl uppercase" :datetime="slot.start_time">
+            {{ formatTime(slot.start_time) }}
           </time>
           <br />
           <span>
