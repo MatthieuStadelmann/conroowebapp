@@ -7,7 +7,7 @@ import SlotPanel from "./components/SlotPanel.vue";
 
 <template>
   <AppHeader />
-  <main class="px-12">
+  <main class="px-6 lg:px-12">
     <HeaderSection />
     <TimeSlots />
     <SlotPanel />

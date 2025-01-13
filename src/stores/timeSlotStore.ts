@@ -14,8 +14,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
   const fetchTimeSlots = async () => {
     try {
       const response = await fetch(import.meta.env.VITE_API_URL + "/timeSlots");
-      const data = await response.json();
-      timeSlots.value = data;
+      timeSlots.value = await response.json();
     } catch (error) {
       console.error("Error fetching time slots:", error);
     }
@@ -35,10 +34,9 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
     return groups;
   });
 
-  const selectSlot = (slot: TimeSlot) => {
+  const selectSlot = (slot: TimeSlot | null) => {
     selectedSlot.value = slot;
   };
-  console.log('selectedSlot', selectedSlot);
 
   return {
     timeSlots,

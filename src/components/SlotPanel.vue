@@ -2,6 +2,11 @@
 import { computed } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
 import { formatDate, formatTime } from "../utils/formatters";
+import {
+  CATEGORY_GREEN,
+  CATEGORY_RED,
+  CATEGORY_YELLOW,
+} from "../constants/categories.ts";
 
 const store = useTimeSlotStore();
 
@@ -11,7 +16,7 @@ const selectedSlot = computed(() => store.selectedSlot);
 
 <template>
   <div
-    class="fixed bottom-0 left-0 right-0 transform border-t border-gray-200 bg-white bg-gradient-to-r from-white to-gray-50 px-10 py-4 shadow-lg transition-transform duration-300"
+    class="fixed bottom-0 left-0 right-0 transform border-t border-gray-200 bg-white bg-gradient-to-r from-white to-gray-50 px-6 py-4 shadow-lg transition-transform duration-300 lg:px-12"
     :class="{
       'translate-y-full': !isPanelVisible,
       'translate-y-0': isPanelVisible,
@@ -25,9 +30,9 @@ const selectedSlot = computed(() => store.selectedSlot);
         <div
           class="absolute left-0 top-0 h-full rounded-full"
           :class="{
-            'bg-greenCategory': selectedSlot.category === 'green',
-            'bg-yellowCategory': selectedSlot.category === 'yellow',
-            'bg-redCategory': selectedSlot.category === 'red',
+            'bg-greenCategory': selectedSlot.category === CATEGORY_GREEN,
+            'bg-yellowCategory': selectedSlot.category === CATEGORY_YELLOW,
+            'bg-redCategory': selectedSlot.category === CATEGORY_RED,
           }"
           :style="{
             width:
