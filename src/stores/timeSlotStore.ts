@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import type { TimeSlot } from "@/types/TimeSlot";
+import type { TimeSlot } from "../types/TimeSlot";
 
 function getDay(dateString: string): string {
   const date = new Date(dateString);

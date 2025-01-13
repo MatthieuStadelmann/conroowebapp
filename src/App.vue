@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AppHeader from "@/components/AppHeader.vue";
+import AppHeader from "./components/AppHeader.vue";
 import HeaderSection from "./components/HeaderSection.vue";
-import TimeSlots from "@/components/TimeSlots.vue";
+import TimeSlots from "./components/TimeSlots.vue";
 </script>
 
 <template>
