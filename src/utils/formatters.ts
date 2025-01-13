@@ -11,16 +11,36 @@ export function formatDay(dateString: string): string {
 }
 
 /**
- * Formats a date string to display the day and abbreviated month (e.g., "13 Jan").
+ * Formats a date string into a readable format with optional inclusion of the weekday.
+ * - When `includeDay` is `true`, the output includes the weekday (e.g., "Monday, 13 Jan").
+ * - When `includeDay` is `false`, the output excludes the weekday (e.g., "13 Jan").
+ *
  * @param dateString - The ISO date string to format.
- * @returns The formatted date in "day month" format (e.g., "13 Jan").
+ * @param includeDay - Optional. If `true`, includes the weekday in the formatted string. Default is `false`.
+ * @returns The formatted date string in "day month" or "weekday, day month" format.
  */
-export function formatDate(dateString: string): string {
+export function formatDate(
+  dateString: string,
+  includeDay: boolean = false,
+  includeYear: boolean = false
+): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB", {
+  const options: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "short",
-  });
+    ...(includeDay && { weekday: "long" }),
+    ...(includeYear && { year: "numeric" }),
+  };
+
+  const formattedDate = date.toLocaleDateString("en-GB", options);
+
+  if (includeDay && includeYear) {
+    const parts = formattedDate.split(" ");
+    return `${parts[0]}, ${parts[1]} ${parts[2]}, ${parts[3]}`;
+  }
+
+  // Return the formatted date
+  return formattedDate;
 }
 
 /**
