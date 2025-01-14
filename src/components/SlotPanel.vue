@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
 import { formatDate, formatTime } from "../utils/formatters";
+import BaseButton from "./UI/BaseButton.vue";
 import {
   CATEGORY_GREEN,
   CATEGORY_RED,
@@ -39,18 +40,17 @@ const selectedSlot = computed(() => store.selectedSlot);
               ((selectedSlot.capacity.max_capacity -
                 selectedSlot.capacity.current_capacity) /
                 selectedSlot.capacity.max_capacity) *
-                100 +
+              100 +
               '%',
           }"
-        ></div>
+        />
       </div>
       <div class="mt-4 flex flex-col lg:flex-row lg:items-center">
         <p class="min-w-[200px] flex-shrink-0">
           <strong>Time:</strong>
           <span class="uppercase">
             {{ formatTime(selectedSlot.start_time) }} -
-            {{ formatTime(selectedSlot.end_time) }}</span
-          >
+            {{ formatTime(selectedSlot.end_time) }}</span>
         </p>
         <p class="min-w-[150px] flex-shrink-0 lg:ml-6">
           <strong>Capacity:</strong>
@@ -58,11 +58,12 @@ const selectedSlot = computed(() => store.selectedSlot);
             selectedSlot.capacity.max_capacity
           }}
         </p>
-        <button
-          class="mt-4 rounded-lg bg-secondary px-4 py-2 font-medium text-primary lg:mt-0"
+        <BaseButton
+          class="mt-4 lg:mt-0"
+          variant="secondary"
         >
           Reserve Slot
-        </button>
+        </BaseButton>
       </div>
     </div>
   </div>

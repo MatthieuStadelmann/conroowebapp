@@ -39,7 +39,9 @@ onMounted(() => {
 
 <template>
   <div class="flex justify-between border-b-2 border-primary py-10">
-    <h1 class="text-4xl font-bold">Trucking Web App</h1>
+    <h1 class="text-4xl font-bold">
+      Trucking Web App
+    </h1>
     <div class="flex items-center space-x-2">
       <span class="relative flex h-3 w-3">
         <span
@@ -50,11 +52,11 @@ onMounted(() => {
             'animate-ping bg-green-400':
               store.connectionStatus === STATUS_CONNECTED,
           }"
-        ></span>
+        />
         <span
           class="relative inline-flex h-3 w-3 rounded-full"
           :class="connectionStatusClass"
-        ></span>
+        />
       </span>
       <span>{{ connectionStatusMessage }}</span>
     </div>

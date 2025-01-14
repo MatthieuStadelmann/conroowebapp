@@ -21,7 +21,7 @@ export function formatDay(dateString: string): string {
  */
 export function formatDate(
   dateString: string,
-  includeDay: boolean = false
+  includeDay: boolean = false,
 ): string {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = includeDay
@@ -48,5 +48,6 @@ export function formatTime(dateString: string): string {
   return date.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
+    hour12: true,
   });
 }
