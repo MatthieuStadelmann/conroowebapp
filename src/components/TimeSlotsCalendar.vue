@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
-import { formatDate, formatDay } from "../utils/formatters";
+import { formatDate, formatDay } from "../utils/dateFormatters";
 import TimeSlot from "./UI/TimeSlot.vue";
 
 const store = useTimeSlotStore();

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
-import { formatDate } from "../utils/formatters";
+import { formatDate } from "../utils/dateFormatters";
 import CapacityBar from "./UI/CapacityBar.vue";
 import TimeSlotDetails from "./UI/TimeSlotDetails.vue";
 

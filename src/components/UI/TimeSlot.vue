@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { formatTime } from "../../utils/formatters.ts";
+import { formatTime } from "../../utils/dateFormatters.ts";
 import { getCategoryClass } from "../../utils/getCategoryClass.ts";
-import type { TimeSlot } from "../../types/TimeSlot";
+import type { TimeSlot } from "../../types";
 
 const props = defineProps<{
   timeSlot: TimeSlot;
@@ -31,12 +31,14 @@ const categoryClass = computed(() => getCategoryClass(props.timeSlot.category));
     >
       {{ formatTime(timeSlot.start_time) }}
     </time>
-    <span 
+    <span
       class="text-sm font-medium"
       :aria-label="`${timeSlot.capacity.current_capacity} out of ${timeSlot.capacity.max_capacity} spots available`"
     >
       Capacity:
-      {{ timeSlot.capacity.current_capacity }}/{{ timeSlot.capacity.max_capacity }}
+      {{ timeSlot.capacity.current_capacity }}/{{
+        timeSlot.capacity.max_capacity
+      }}
     </span>
   </button>
 </template>

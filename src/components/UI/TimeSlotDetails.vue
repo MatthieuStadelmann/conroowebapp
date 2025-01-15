@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatTime } from "../../utils/formatters";
+import { formatTime } from "../../utils/dateFormatters";
 import BaseButton from "./BaseButton.vue";
 import type { TimeSlot } from "../../types";
 

@@ -1,23 +1,9 @@
 import { defineStore } from "pinia";
-import { ref, computed, type ComputedRef, type Ref } from "vue";
-import type { TimeSlot, ConnectionStatus } from "../types";
+import { ref, computed } from "vue";
+import type { TimeSlot } from "../types";
 import { useSSE } from "../composables/useSSE";
-
-function getDay(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toISOString().split("T")[0];
-}
-
-interface TimeSlotStoreState {
-  timeSlots: Ref<TimeSlot[]>;
-  groupedTimeSlots: ComputedRef<Record<string, TimeSlot[]>>;
-  selectedSlot: Ref<TimeSlot | null>;
-  connectionStatus: Ref<ConnectionStatus>;
-  fetchTimeSlots: () => Promise<void>;
-  selectSlot: (slot: TimeSlot | null) => void;
-  startSSE: () => void;
-  closeSSE: () => void;
-}
+import type { TimeSlotStoreState } from "../types/store";
+import { getDay } from "../utils/date";
 
 export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState => {
   const timeSlots = ref<TimeSlot[]>([]);
