@@ -1,15 +1,27 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue';
+import { useTimeSlotStore } from './stores/timeSlotStore';
 import AppHeader from "./components/AppHeader.vue";
-import HeaderSection from "./components/HeaderSection.vue";
-import TimeSlots from "./components/TimeSlots.vue";
-import SlotPanel from "./components/SlotPanel.vue";
+import TimeSlotsCalendar from "./components/TimeSlotsCalendar.vue";
+import TimeSlotPanel from "./components/TimeSlotPanel.vue";
+import PageTitleBar from './components/PageTitleBar.vue';
+
+const store = useTimeSlotStore();
+
+onMounted(() => {
+  store.startSSE();
+});
+
+onUnmounted(() => {
+  store.closeSSE(); 
+});
 </script>
 
 <template>
   <AppHeader />
   <main class="px-6 lg:px-12">
-    <HeaderSection />
-    <TimeSlots />
-    <SlotPanel />
+    <PageTitleBar />
+    <TimeSlotsCalendar />
+    <TimeSlotPanel />
   </main>
 </template>
