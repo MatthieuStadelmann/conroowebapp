@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import type { TimeSlot } from "../types";
+import { ref, computed, type ComputedRef, type Ref } from "vue";
+import type { TimeSlot, ConnectionStatus } from "../types";
 import { useSSE } from "../composables/useSSE";
 
 function getDay(dateString: string): string {
@@ -8,7 +8,18 @@ function getDay(dateString: string): string {
   return date.toISOString().split("T")[0];
 }
 
-export const useTimeSlotStore = defineStore("timeSlot", () => {
+interface TimeSlotStoreState {
+  timeSlots: Ref<TimeSlot[]>;
+  groupedTimeSlots: ComputedRef<Record<string, TimeSlot[]>>;
+  selectedSlot: Ref<TimeSlot | null>;
+  connectionStatus: Ref<ConnectionStatus>;
+  fetchTimeSlots: () => Promise<void>;
+  selectSlot: (slot: TimeSlot | null) => void;
+  startSSE: () => void;
+  closeSSE: () => void;
+}
+
+export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState => {
   const timeSlots = ref<TimeSlot[]>([]);
   const selectedSlot = ref<TimeSlot | null>(null);
 
@@ -22,7 +33,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
     }
   });
 
-  const fetchTimeSlots = async () => {
+  const fetchTimeSlots = async (): Promise<void> => {
     try {
       const response = await fetch(import.meta.env.VITE_API_URL + "/timeSlots");
       timeSlots.value = await response.json();
@@ -31,7 +42,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
     }
   };
 
-  const groupedTimeSlots = computed(() => {
+  const groupedTimeSlots = computed((): Record<string, TimeSlot[]> => {
     const groups: Record<string, TimeSlot[]> = {};
     timeSlots.value.forEach((slot) => {
       const day = getDay(slot.start_time);
@@ -41,7 +52,7 @@ export const useTimeSlotStore = defineStore("timeSlot", () => {
     return groups;
   });
 
-  const selectSlot = (slot: TimeSlot | null) => {
+  const selectSlot = (slot: TimeSlot | null): void => {
     selectedSlot.value = slot;
   };
 

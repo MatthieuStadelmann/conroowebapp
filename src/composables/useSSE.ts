@@ -1,17 +1,12 @@
-import { ref, type Ref } from 'vue';
-import type { ConnectionStatus, SSEUpdate } from "../types";
+import { ref } from 'vue';
+import type { SSEUpdate, ConnectionStatus } from "../types";
+import type { SSEComposable } from "../types/composables";
 import {
   STATUS_CONNECTED,
   STATUS_CONNECTING,
   STATUS_DISCONNECTED,
   STATUS_ERROR,
 } from "../constants/connectionStatus";
-
-interface SSEComposable {
-  connectionStatus: Ref<ConnectionStatus>;
-  startSSE: () => void;
-  closeSSE: () => void;
-}
 
 export function useSSE(onUpdate: (update: SSEUpdate) => void): SSEComposable {
   const connectionStatus = ref<ConnectionStatus>(STATUS_DISCONNECTED);
