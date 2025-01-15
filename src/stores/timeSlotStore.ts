@@ -3,7 +3,8 @@ import { ref, computed } from "vue";
 import type { TimeSlot } from "../types";
 import { useSSE } from "../composables/useSSE";
 import type { TimeSlotStoreState } from "../types/store";
-import { getDay } from "../utils/date";
+import { getDay } from "../utils/dateFormatters";
+import { normalizeTimeSlot } from "../utils/normalizeTimeSlot";
 
 export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState => {
   const timeSlots = ref<TimeSlot[]>([]);
@@ -22,7 +23,8 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
   const fetchTimeSlots = async (): Promise<void> => {
     try {
       const response = await fetch(import.meta.env.VITE_API_URL + "/timeSlots");
-      timeSlots.value = await response.json();
+      const rawTimeSlots = await response.json();
+      timeSlots.value = rawTimeSlots.map(normalizeTimeSlot);
     } catch (error) {
       console.error("Error fetching time slots:", error);
     }
