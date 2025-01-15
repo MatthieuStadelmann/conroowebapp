@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import type { ConnectionStatus, SSEUpdate } from "../types";
 import {
   STATUS_CONNECTED,
@@ -7,19 +7,25 @@ import {
   STATUS_ERROR,
 } from "../constants/connectionStatus";
 
-export function useSSE(onUpdate: (update: SSEUpdate) => void) {
+interface SSEComposable {
+  connectionStatus: Ref<ConnectionStatus>;
+  startSSE: () => void;
+  closeSSE: () => void;
+}
+
+export function useSSE(onUpdate: (update: SSEUpdate) => void): SSEComposable {
   const connectionStatus = ref<ConnectionStatus>(STATUS_DISCONNECTED);
   let eventSource: EventSource | null = null;
 
-  const startSSE = () => {
+  const startSSE = (): void => {
     eventSource = new EventSource(import.meta.env.VITE_API_URL + "/sse");
     connectionStatus.value = STATUS_CONNECTING;
 
-    eventSource.onopen = () => {
+    eventSource.onopen = (): void => {
       connectionStatus.value = STATUS_CONNECTED;
     };
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = (event: MessageEvent): void => {
       try {
         const update: SSEUpdate = JSON.parse(event.data);
         onUpdate(update);
@@ -29,7 +35,7 @@ export function useSSE(onUpdate: (update: SSEUpdate) => void) {
       }
     };
 
-    eventSource.onerror = () => {
+    eventSource.onerror = (): void => {
       console.error("SSE connection failed. Retrying...");
       connectionStatus.value = STATUS_DISCONNECTED;
       eventSource?.close();
@@ -37,7 +43,7 @@ export function useSSE(onUpdate: (update: SSEUpdate) => void) {
     };
   };
 
-  const closeSSE = () => {
+  const closeSSE = (): void => {
     eventSource?.close();
     eventSource = null;
   };
