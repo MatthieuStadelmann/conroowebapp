@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { formatTime } from "../../utils/formatters.ts";
-import TimeSlot from "./TimeSlot.vue";
 import { getCategoryClass } from "../../utils/getCategoryClass.ts";
+import type { TimeSlot } from "../../types/TimeSlot";
 
 const props = defineProps<{
   timeSlot: TimeSlot;
   isSelected?: boolean;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   (event: "select", timeSlot: TimeSlot): void;
 }>();
 
-function handleClick() {
-  emit("select", props.timeSlot);
-}
-
 const categoryClass = computed(() => getCategoryClass(props.timeSlot.category));
 </script>
+
 <template>
-  <li
-    class="mb-4 cursor-pointer list-none rounded-lg border p-2 text-white transition focus:outline-none focus:ring-4 focus:ring-secondary"
+  <button
+    type="button"
+    class="mb-4 block w-full rounded-lg border p-2 text-left text-white transition focus:outline-none focus:ring-4 focus:ring-secondary"
     :class="[categoryClass, isSelected ? 'ring-4 ring-secondary' : '']"
-    @click="handleClick"
+    :aria-selected="isSelected"
+    :aria-label="`Time slot at ${formatTime(timeSlot.start_time)}`"
+    @click="$emit('select', timeSlot)"
   >
     <time
-      class="text-lg font-medium uppercase"
+      class="block text-lg font-medium uppercase"
       :datetime="timeSlot.start_time"
     >
       {{ formatTime(timeSlot.start_time) }}
     </time>
-    <br>
-    <span class="text-sm font-medium">
+    <span 
+      class="text-sm font-medium"
+      :aria-label="`${timeSlot.capacity.current_capacity} out of ${timeSlot.capacity.max_capacity} spots available`"
+    >
       Capacity:
-      {{ timeSlot.capacity.current_capacity }}/{{
-        timeSlot.capacity.max_capacity
-      }}
+      {{ timeSlot.capacity.current_capacity }}/{{ timeSlot.capacity.max_capacity }}
     </span>
-  </li>
+  </button>
 </template>
