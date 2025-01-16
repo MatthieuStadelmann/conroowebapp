@@ -64,7 +64,8 @@ Here are some of the key decisions made during the development of this app:
 - Pinia was chosen to handle shared state like selected slots and real-time updates. It integrates seamlessly with Vue 3 and ensures scalability.
 
 ### Performance
-- Minimized External Dependencies: External libraries were avoided where possible to keep the app lightweight. For example, custom date and time formatters were implemented instead of relying on additional dependencies, reducing bundle size and maintenance complexity.
+- Minimized External Dependencies: External libraries were avoided where possible to keep the app lightweight.
+- Optimized SSE updates using Vue's reactivity system to batch rapid changes and minimize re-renders
 
 ### Testing Strategy
 - Focused on core application logic first:

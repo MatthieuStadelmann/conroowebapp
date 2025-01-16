@@ -7,6 +7,10 @@ defineProps<{
   timeSlot: TimeSlot;
 }>();
 
+defineEmits<{
+  (e: 'close'): void;
+}>();
+
 const handleReserve = () => {
   alert("🚛 Oops! This button is as functional as a chocolate teapot! \n\n" +
         "The developer was too busy writing TypeScript interfaces to implement actual reservations. 😅");
