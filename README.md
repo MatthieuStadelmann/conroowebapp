@@ -48,14 +48,30 @@ npm run preview
 ```
 The app will be available at http://localhost:4173.
 
+### Testing
+To run the tests, run:
+```
+npm test
+```
+
 ## Design Choices
 Here are some of the key decisions made during the development of this app:
+
+### Build Tooling
+- Vite was used for its fast development server and optimized production builds. 
 
 ### State Management
 - Pinia was chosen to handle shared state like selected slots and real-time updates. It integrates seamlessly with Vue 3 and ensures scalability.
 
-### Build Tooling
-- Vite was used for its fast development server and optimized production builds. 
+### Performance
+- Minimized External Dependencies: External libraries were avoided where possible to keep the app lightweight. For example, custom date and time formatters were implemented instead of relying on additional dependencies, reducing bundle size and maintenance complexity.
+
+### Testing Strategy
+- Focused on core application logic first:
+  1. **Stores**: Ensures reliable state management and data flow
+  2. **Utility Functions**: Validates core business logic and data transformations
+  3. **Composables**: Tests reusable logic like SSE connections
+- UI components testing planned for later phases
 
 ### Styling
 - Tailwind CSS enabled rapid styling and a consistent design system, reducing the need for custom CSS.
@@ -63,6 +79,3 @@ Here are some of the key decisions made during the development of this app:
 ### Linting, Formatting, and Git Hooks
 - ESLint and Prettier were integrated to enforce code quality and consistent formatting.
 - Husky was used to run pre-commit hooks, ensuring linting and formatting checks are completed before commits.
-
-### Performance
-- Minimized External Dependencies: External libraries were avoided where possible to keep the app lightweight. For example, custom date and time formatters were implemented instead of relying on additional dependencies, reducing bundle size and maintenance complexity.
