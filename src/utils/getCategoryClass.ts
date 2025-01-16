@@ -2,6 +2,10 @@ import {
   CATEGORY_GREEN,
   CATEGORY_YELLOW,
   CATEGORY_RED,
+  STYLE_GREEN,
+  STYLE_YELLOW,
+  STYLE_RED,
+  STYLE_DEFAULT
 } from "../constants/categories.ts";
 
 /**
@@ -18,12 +22,12 @@ import {
 export function getCategoryClass(category: string): string {
   switch (category) {
     case CATEGORY_GREEN:
-      return "bg-greenCategory";
+      return STYLE_GREEN
     case CATEGORY_YELLOW:
-      return "bg-yellowCategory";
+      return STYLE_YELLOW;
     case CATEGORY_RED:
-      return "bg-redCategory";
+      return STYLE_RED;
     default:
-      return "bg-gray-200";
+      return STYLE_DEFAULT;
   }
 }
