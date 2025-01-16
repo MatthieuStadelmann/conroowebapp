@@ -22,7 +22,13 @@ npm install
 ```
 
 ### Environment Setup
-Create a .env file in the root directory and configure the following:
+Run this command to create the .env file:
+
+```bash
+touch .env
+```
+
+Then configure the following in the .env file:
 
 ```
 VITE_API_URL=https://timeslot-stream-ha2tva3niq-ey.a.run.app
