@@ -69,9 +69,9 @@ Here are some of the key decisions made during the development of this app:
 
 ### Testing Strategy
 - Focused on core application logic first:
-  1. **Stores**: Ensures reliable state management and data flow
-  2. **Utility Functions**: Validates core business logic and data transformations
-  3. **Composables**: Tests reusable logic like SSE connections
+  1. **SSE Connection**: Tests real-time update handling and reconnection logic
+  2. **Store Management**: Validates time slot updates and state transitions
+  3. **Data Flow**: Ensures correct handling of incoming SSE events
 - UI components testing planned for later phases
 
 ### Styling
