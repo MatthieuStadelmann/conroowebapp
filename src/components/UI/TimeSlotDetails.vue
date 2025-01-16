@@ -6,6 +6,11 @@ import type { TimeSlot } from "../../types";
 defineProps<{
   timeSlot: TimeSlot;
 }>();
+
+const handleReserve = () => {
+  alert("🚛 Oops! This button is as functional as a chocolate teapot! \n\n" +
+        "The developer was too busy writing TypeScript interfaces to implement actual reservations. 😅");
+};
 </script>
 
 <template>
@@ -24,6 +29,7 @@ defineProps<{
     <BaseButton
       class="mt-4 lg:mt-0"
       variant="secondary"
+      @click="handleReserve"
     >
       Reserve Slot
     </BaseButton>

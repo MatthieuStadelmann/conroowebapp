@@ -1,18 +1,31 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
 import { formatDate, formatDay } from "../utils/dateFormatters";
 import TimeSlot from "./UI/TimeSlot.vue";
 
 const store = useTimeSlotStore();
+const calendarRef = ref<HTMLElement | null>(null);
+
+const marginClass = computed(() => 
+  store.selectedSlot ? 'mb-60 lg:mb-40' : 'mb-10'
+);
 
 onMounted(() => {
   store.fetchTimeSlots();
+  document.addEventListener('click', (event) => {
+    if (calendarRef.value && !calendarRef.value.contains(event.target as Node)) {
+      store.selectSlot(null);
+    }
+  });
 });
 </script>
 
 <template>
-  <div class="mb-60 mt-10 grid grid-cols-1 gap-4 lg:mb-40 lg:grid-cols-5">
+  <div 
+    ref="calendarRef"
+    :class="['mt-10 grid grid-cols-1 gap-4 transition-[margin] duration-300 ease-in-out lg:grid-cols-5', marginClass]"
+  >
     <div
       v-for="(slots, day) in store.groupedTimeSlots"
       :key="day"
