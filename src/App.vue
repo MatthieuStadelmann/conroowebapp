@@ -19,7 +19,7 @@ onUnmounted(() => {
 
 <template>
   <AppHeader />
-  <main class="px-6 lg:px-12">
+  <main class="flex min-h-screen flex-col px-6 lg:px-12">
     <PageTitleBar />
     <TimeSlotsCalendar />
     <TimeSlotPanel />

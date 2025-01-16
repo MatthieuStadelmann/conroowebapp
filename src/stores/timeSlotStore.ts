@@ -9,6 +9,8 @@ import { normalizeTimeSlot } from "../utils/normalizeTimeSlot";
 export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState => {
   const timeSlots = ref<TimeSlot[]>([]);
   const selectedSlot = ref<TimeSlot | null>(null);
+  const isLoading = ref<boolean>(false);
+  const error = ref<string | null>(null);
 
   const { connectionStatus, startSSE, closeSSE } = useSSE((update) => {
     const slotToUpdate = timeSlots.value.find(
@@ -21,12 +23,18 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
   });
 
   const fetchTimeSlots = async (): Promise<void> => {
+    isLoading.value = true;
+    error.value = null;
+    
     try {
       const response = await fetch(import.meta.env.VITE_API_URL + "/timeSlots");
+      if (!response.ok) throw new Error('Failed to fetch time slots');
       const rawTimeSlots = await response.json();
       timeSlots.value = rawTimeSlots.map(normalizeTimeSlot);
-    } catch (error) {
-      console.error("Error fetching time slots:", error);
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : 'An error occurred';
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -48,6 +56,8 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
     timeSlots,
     groupedTimeSlots,
     selectedSlot,
+    isLoading,
+    error,
     connectionStatus,
     fetchTimeSlots,
     selectSlot,
