@@ -29,10 +29,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-[calc(100vh-12rem)]">
+  <div class="flex-grow">
     <div 
       v-if="store.isLoading"
-      class="flex min-h-[32rem] items-center justify-center"
+      class="grid h-[50vh] place-content-center"
     >
       <BaseLoader />
     </div>
