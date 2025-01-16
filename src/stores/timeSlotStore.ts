@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import type { TimeSlot } from "../types";
+import { ref, computed, watch } from "vue";
+import type { SSEUpdate, TimeSlot } from "../types";
 import { useSSE } from "../composables/useSSE";
 import type { TimeSlotStoreState } from "../types/store";
 import { getDay } from "../utils/dateFormatters";
@@ -11,8 +11,11 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
   const selectedSlot = ref<TimeSlot | null>(null);
   const isLoading = ref<boolean>(false);
   const error = ref<string | null>(null);
+  const pendingUpdate = ref<SSEUpdate | null>(null);
 
-  const { connectionStatus, startSSE, closeSSE } = useSSE((update) => {
+  watch(pendingUpdate, (update) => {
+    if (!update) return;
+    
     const slotToUpdate = timeSlots.value.find(
       (slot) => slot.id === update.id,
     );
@@ -20,6 +23,11 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
       slotToUpdate.capacity.current_capacity = update.currentCapacity;
       slotToUpdate.category = update.category;
     }
+    pendingUpdate.value = null;
+  }, { flush: 'sync' });
+
+  const { connectionStatus, startSSE, closeSSE } = useSSE((update) => {
+    pendingUpdate.value = update;
   });
 
   const fetchTimeSlots = async (): Promise<void> => {
@@ -39,13 +47,19 @@ export const useTimeSlotStore = defineStore("timeSlot", (): TimeSlotStoreState =
   };
 
   const groupedTimeSlots = computed((): Record<string, TimeSlot[]> => {
-    const groups: Record<string, TimeSlot[]> = {};
-    timeSlots.value.forEach((slot) => {
+    const currentTimeSlots = timeSlots.value;
+    
+    const groupMap = new Map<string, TimeSlot[]>();
+    
+    currentTimeSlots.forEach((slot) => {
       const day = getDay(slot.start_time);
-      if (!groups[day]) groups[day] = [];
-      groups[day].push(slot);
+      if (!groupMap.has(day)) {
+        groupMap.set(day, []);
+      }
+      groupMap.get(day)!.push(slot);
     });
-    return groups;
+    
+    return Object.fromEntries(groupMap);
   });
 
   const selectSlot = (slot: TimeSlot | null): void => {

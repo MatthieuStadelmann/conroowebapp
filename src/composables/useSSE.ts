@@ -12,6 +12,16 @@ export function useSSE(onUpdate: (update: SSEUpdate) => void): SSEComposable {
   const connectionStatus = ref<ConnectionStatus>(STATUS_DISCONNECTED);
   let eventSource: EventSource | null = null;
 
+  const reconnectDelay = ref(1000);
+  const maxDelay = 30000;
+
+  const reconnect = () => {
+    setTimeout(() => {
+      startSSE();
+      reconnectDelay.value = Math.min(reconnectDelay.value * 2, maxDelay);
+    }, reconnectDelay.value);
+  };
+
   const startSSE = (): void => {
     eventSource = new EventSource(import.meta.env.VITE_API_URL + "/sse");
     connectionStatus.value = STATUS_CONNECTING;
@@ -34,7 +44,7 @@ export function useSSE(onUpdate: (update: SSEUpdate) => void): SSEComposable {
       console.error("SSE connection failed. Retrying...");
       connectionStatus.value = STATUS_DISCONNECTED;
       eventSource?.close();
-      setTimeout(startSSE, 5000);
+      reconnect();
     };
   };
 

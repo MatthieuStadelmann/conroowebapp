@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, onUnmounted } from "vue";
+import { onMounted, ref, computed, onUnmounted, defineAsyncComponent } from "vue";
 import { useTimeSlotStore } from "../stores/timeSlotStore";
 import { formatDate, formatDay } from "../utils/dateFormatters";
 import TimeSlot from "./UI/TimeSlot.vue";
@@ -17,6 +17,13 @@ const handleOutsideClick = (event: MouseEvent) => {
     store.selectSlot(null);
   }
 };
+
+const TimeSlotPanel = defineAsyncComponent({
+  loader: () => import('./TimeSlotPanel.vue'),
+  loadingComponent: undefined,
+  delay: 0,
+  timeout: 3000
+});
 
 onMounted(() => {
   store.fetchTimeSlots();
@@ -68,5 +75,7 @@ onUnmounted(() => {
         </ul>
       </div>
     </div>
+
+    <TimeSlotPanel />
   </div>
 </template>
